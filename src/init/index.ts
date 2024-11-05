@@ -1,10 +1,14 @@
 
-import ConnectToMysql from "../database/init";
+import ConnectToMysql from "../databases/mysql/use";
+import '../utils/global/handler'
 
 // Init function, on the top
-(function () {
-    try {
-        ConnectToMysql(); // Check database connected
-    } catch (e: any) {
+class Initializer {
+    static {
+        async () => {
+            await ConnectToMysql(); // [Mysql] Check database connected
+        }
     }
-})();
+}
+
+export default Initializer;

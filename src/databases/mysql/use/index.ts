@@ -2,6 +2,11 @@
 import CREATE_DATABASE_INIT from "./create_database"
 import CREATE_TABLE_INIT from "./create_tables"
 
+/**
+ * init MYSQL database for use
+ * 
+ * @author MRB
+ */
 export default async function () {
   try {
     const results = await CREATE_DATABASE_INIT(); // check database
