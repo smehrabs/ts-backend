@@ -1,29 +1,49 @@
+import ItemModel from "./models/item.js";
+import { config } from "#config/env_get";
+import Database from "./use/index.js"
+import { mongo_ns } from "#ts/interfaces.js";
+import mongoose from "mongoose";
+import { ItemCreate } from "./modules/save.js";
+import { ItemFind } from "./modules/find.js";
+import { ItemDelete } from "./modules/drop.js";
 
-var MongoClient = require('mongodb').MongoClient;
-var mongo_url = "mongodb://localhost:27017/";
+class Service {
+  private itemModel: mongoose.Model<mongo_ns.IItem>;
+  private itemCreate: ItemCreate;
+  private itemFind: ItemFind;
+  private itemDelete: ItemDelete;
 
-MongoClient.connect(mongo_url, function(err: any, db: any) {
-  if (err) throw err;
-  var dbo = db.db("mydb");
-  var myobj = [
-    { name: 'John', address: 'Highway 71'},
-    { name: 'Peter', address: 'Lowstreet 4'},
-    { name: 'Amy', address: 'Apple st 652'},
-    { name: 'Hannah', address: 'Mountain 21'},
-    { name: 'Michael', address: 'Valley 345'},
-    { name: 'Sandy', address: 'Ocean blvd 2'},
-    { name: 'Betty', address: 'Green Grass 1'},
-    { name: 'Richard', address: 'Sky st 331'},
-    { name: 'Susan', address: 'One way 98'},
-    { name: 'Vicky', address: 'Yellow Garden 2'},
-    { name: 'Ben', address: 'Park Lane 38'},
-    { name: 'William', address: 'Central st 954'},
-    { name: 'Chuck', address: 'Main Road 989'},
-    { name: 'Viola', address: 'Sideway 1633'}
-  ];
-  dbo.collection("customers").insertMany(myobj, function(err: any, res: any) {
-    if (err) throw err;
-    console.log("Number of documents inserted: " + res.insertedCount);
-    db.close();
-  });
-}); 
+  constructor() {
+    this.itemModel = ItemModel.getModel();
+    this.itemCreate = new ItemCreate(this.itemModel);
+    this.itemFind = new ItemFind(this.itemModel);
+    this.itemDelete = new ItemDelete(this.itemModel);
+  }
+
+  public createItem(title: string, descrp: string) {
+    return this.itemCreate.createItem(title, descrp);
+  }
+
+  public getItemByTitle(title: string) {
+    return this.itemFind.getItemByTitle(title);
+  }
+
+  public deleteItem(title: string) {
+    return this.itemDelete.deleteItem(title);
+  }
+
+  public dropCollection() {
+    return this.itemDelete.dropCollection();
+  }
+}
+
+const main = async () => {
+  const db = new Database(config.mongo_url);
+  await db.connect();
+
+  const itemService = new Service();
+  await itemService.createItem("عنوان", "توضیحات");
+
+};
+
+main();

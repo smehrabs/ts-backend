@@ -1,3 +1,9 @@
 npm test
 &&
 npm run build && npm run start
+
+
+## INFO
++ ESM Module
+
+### Make it easy/simple and usefull
