@@ -1,12 +1,12 @@
-import ConnectToMysql from "#databases/mysql/use/index";
+import ConnectDatabase from "#modules/c-init";
 import "#utils/global/handler";
 
 // Init function, on the top
 class Initializer {
   static {
-    async () => {
-      await ConnectToMysql(); // [Mysql] Check database connected
-    };
+    (async () => {
+      await ConnectDatabase(); // Check databases connected
+    })();
   }
 }
 
