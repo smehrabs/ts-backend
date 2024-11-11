@@ -1,13 +1,13 @@
 {
   "name": "router-book",
-  "version": "3.0.0",
+  "version": "4.1.1",
   "description": "save && get books",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "build": "rimraf dist && tsc",
     "start": "node .",
-    "pretty": "prettier --write \"./src/**/*.{js,ts,json}\"" 
+    "pretty": "prettier --write \"./src/**/*.{js,ts,json}\""
   },
   "imports": {
     "#*": "./dist/*.js"
@@ -22,7 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.0",
-    "mysql2": "^3.11.3"
+    "mysql2": "^3.11.3",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
@@ -30,6 +31,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.9.0",
+    "@types/yargs": "^17.0.33",
     "install": "^0.13.0",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",

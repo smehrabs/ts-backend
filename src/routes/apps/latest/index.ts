@@ -6,12 +6,17 @@ import {
 } from "#controllers/index";
 import checkAdmin from "#middleware/checkAdmin";
 import { loginController } from "#controllers/admin/login";
+import { checkIP } from "#middleware/cons";
 
 const router = Router();
+
+router.use(checkIP)
 
 router.post("/login", loginController); // endpoint
 router.get("/get", checkAdmin, getBookController);
 router.post("/save", checkAdmin, saveBookController);
 router.post("/drop", checkAdmin, dropBookController);
+
+console.log("main router loaded");
 
 export default router;

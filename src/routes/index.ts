@@ -1,17 +1,11 @@
-import { Router } from "express";
-import {
-  getBookController,
-  saveBookController,
-  dropBookController,
-} from "#controllers/index";
-import checkAdmin from "#middleware/checkAdmin";
-import { loginController } from "#controllers/admin/login";
+import { AllApps } from "./apps/a.js";
+import { loadRoutes } from "./misc/apps-routes.js";
+import { Express } from "express";
 
-const router = Router();
-
-router.post("/login", loginController); // endpoint
-router.get("/get", checkAdmin, getBookController);
-router.post("/save", checkAdmin, saveBookController);
-router.post("/drop", checkAdmin, dropBookController);
-
-export default router;
+export default async function (app: Express): Promise<void> {
+  try {
+    await loadRoutes(app, AllApps);
+  } catch (error) {
+    console.log("error! loading not complete.");
+  }
+}
