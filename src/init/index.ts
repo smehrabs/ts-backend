@@ -1,13 +1,5 @@
-import ConnectDatabase from "#modules/c-init";
-import "#utils/global/handler";
+import "#utils/requirements";
 
-// Init function, on the top
-class Initializer {
-  static {
-    (async () => {
-      await ConnectDatabase(); // Check databases connected
-    })();
-  }
-}
+await import("#utils/global/index");
 
-export default Initializer;
+import "#misc/onexit"

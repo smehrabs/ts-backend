@@ -1,25 +1,41 @@
 import { config } from "#config/env_get";
-import booksRouter from "#routes/index";
-import express from "express";
+import loadAllRouter from "#routes/index";
+import express, { Request, Response } from "express";
+import swaggerDocs from "#config/swaggerDocs";
+import { initApp } from "#app-ex-ord";
 
-import "#init/index"; // init
-import { helmetConfig } from "#config/helment";
-// import { ipv6Blocker } from "#middleware/ipv6Blocker";
-
-export function expressApp() {
+export async function expressApp() {
   // app (express)
   const app = express();
-  
-  // ipv6Blocker(app); // IPv6 Blocker
 
-  app.use(helmetConfig()); // helment helper
-  app.use(express.json()); // json
+  initApp(app)
+    .then(function () {
+      loadAllRouter(app)
+        .then(function () {
+          app.listen(config.PORT, () => {
+            log.info("Server is running on port: " + config.PORT);
 
-  app.use(express.urlencoded({ extended: true })); // options
-  // app.use("/", booksRouter); // book router
-  booksRouter(app);
+            swaggerDocs(app, config.PORT.toString());
+          });
+        })
+        .catch(function () {
+          log.error("unknown error when init app");
+          die();
+        });
+    })
+    .catch(function () {
+      log.error("unknown error when init app");
+      die();
+    });
 
-  app.listen(config.PORT, () => {
-    console.log("Server connected, port: " + config.PORT);
+  app.get("/test/sleep", (req: Request, res: Response) => {
+    // time out is 3 in all routers
+    // but this codes run in background as well
+    setTimeout(() => {
+      res.json({ message: "Data retrieved successfully!" });
+      log.info("SLEEP1");
+      die();
+    }, 5000);
+    log.info("SLEEP2");
   });
 }
