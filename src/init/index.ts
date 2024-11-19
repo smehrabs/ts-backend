@@ -1,5 +1,10 @@
-import "#utils/requirements";
+import '#utils/requirements';
 
-await import("#utils/global/index");
+await import('#utils/global/index');
 
-import "#misc/onexit"
+import '#core/misc/onexit';
+import { checkAndRenameLogFile } from '#core/misc/logBakChecker';
+
+(async function () {
+  await checkAndRenameLogFile();
+})();

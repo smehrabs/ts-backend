@@ -1,29 +1,47 @@
-import { databasesArray } from "#databases/modules";
-import { MongoModuleNames, MysqlModuleNames } from "#ts/enums";
-import cuse from "./c-use.js";
-import assert from "assert";
+import assert from 'assert';
+
+import cuse from './c-use.js';
+
+import { databasesArray } from '#databases/modules';
+import { MongoModuleNames, MysqlModuleNames } from '#ts/enums';
 
 const dbUse = cuse();
 
+// TODO() Check this ????
 // both options for call all databases
 export async function call(
   functionName: string | MongoModuleNames | MysqlModuleNames,
-  ...args: any[]
+  ...args: readonly any[]
 ): Promise<any> {
-  const row = databasesArray.find((r) => r.name === dbUse);
+  const rows = databasesArray.filter((r) => r.name === dbUse);
 
-  if (!row) assert(false, "[M40]: Row not found");
+  if (rows.length === 0) {
+    assert(false, '[M40]: Row not found');
+  }
 
   if (true) {
-    // check cache (!row.called)
     try {
-      const namedFunction = row.modules.find((f) => f.name === functionName);
+      // check cache (!row.called)
+      const namedFunctions = rows.flatMap((row) =>
+        row.modules
+          .filter((f) => f.name === functionName)
+          .map((f) => ({ ...f, rowName: row.name })),
+      );
 
-      if (namedFunction) {
-        log.info(`Calling ${namedFunction.name} from ${row.name}:`);
-        return await namedFunction.func(...args);
+      if (namedFunctions.length > 0) {
+        try {
+          for (const namedFunction of namedFunctions) {
+            log.info(
+              `Calling ${namedFunction.name} from ${namedFunction.rowName}:`,
+            );
+            return await namedFunction.func(...args);
+          }
+        } catch (error) {
+          log.info(`error in call! -> ` + error);
+          return null;
+        }
       } else {
-        log.info(`Function ${functionName} not found in ${row.name}.`);
+        log.info(`Function ${functionName} not found in ${dbUse}.`);
         return null;
       }
     } catch (error) {

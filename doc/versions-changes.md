@@ -33,7 +33,7 @@
 ## 4.2:
 + add access-token/refresh-token over one token (admin)
 + add winston for log
-+ fix find dist folder
++ fix find dist/build folder
 + add timeout for routers
 + add res handler for routers
 + add cors lib
@@ -43,3 +43,6 @@
 ## 4.2.1:
 + fix access/refresh token login
 + Fixing the stability of version 4
+
+## 6:
++ add eslint, spell checker, prettier config, new tsconfig settings, editorconfig, github config
