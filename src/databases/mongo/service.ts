@@ -27,13 +27,18 @@ class Service {
 
   public async createItem(
     title: string,
-    descrp: string,
+    description: string,
   ): Promise<mongo_ns.IItem | string> {
-    return await this.itemCreate.createItem(title, descrp);
+    return await this.itemCreate.createItem(title, description);
   }
 
   public async getItemByTitle(title: string): Promise<mongo_ns.IItem | string> {
     return await this.itemFind.getItemByTitle(title);
+  }
+
+  // eslint-disable-next-line functional/prefer-readonly-type
+  public async getAllItem(): Promise<mongo_ns.IItem[] | string> {
+    return await this.itemFind.getAllItems();
   }
 
   public async deleteItem(title: string): Promise<string> {
@@ -73,6 +78,10 @@ export const mongoModules: DatabasesType = {
     {
       name: MongoModuleNames.delete,
       func: itemService.deleteItem.bind(itemService),
+    },
+    {
+      name: MongoModuleNames.getall,
+      func: itemService.getAllItem.bind(itemService),
     },
   ],
 };
