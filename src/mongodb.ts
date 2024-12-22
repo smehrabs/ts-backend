@@ -31,9 +31,9 @@ export class DbManager {
   public dynamicModel: Model<DynamicData> | null = null;
 
   @CatchErrors
-  public async connect(): Promise<void> {
+  public async connect(DbName?: string): Promise<void> {
     if (!this.connection) {
-      const dbName: string = configs.EnvConfig.db || 'db';
+      const dbName: string = configs.EnvConfig.db || DbName || 'db';
       console.log('Connecting to database:', dbName);
       this.connection = await mongoose.connect(
         `mongodb://localhost:27017/${dbName}`
