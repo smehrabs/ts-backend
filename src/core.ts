@@ -44,7 +44,6 @@ new (class extends Core {
   public Main(): void {
     if (configs.Args.test) {
       console.log('[__info__] Application is starting...');
-      this.logger.info('Debug mode');
       void (async (): Promise<void> => {
         await this.dbManager.connect();
 

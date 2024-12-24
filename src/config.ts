@@ -40,7 +40,7 @@ export class ConfigManager {
 
     while (currentDir) {
       const possiblePath = path.join(currentDir, envFileName);
-      console.log('debug: ' + possiblePath);
+      console.log('[info] config: ' + possiblePath);
       try {
         if (fs.existsSync(possiblePath)) {
           return possiblePath;

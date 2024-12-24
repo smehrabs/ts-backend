@@ -9,8 +9,9 @@ export class AmqpManager {
 
   @CatchErrors
   public async connect(amqpUrl: string): Promise<void> {
+    console.log('[info] amqp: create connection');
     if (!amqpUrl) {
-      throw new Error('Queue cannot be null.');
+      throw new Error('[error] amqp: Queue cannot be null.');
     }
     this.connection = await connect(amqpUrl);
     this.channel = await this.connection.createChannel();
@@ -20,6 +21,8 @@ export class AmqpManager {
   public async close(): Promise<void> {
     if (this.channel) await this.channel.close();
     if (this.connection) await this.connection.close();
+
+    console.log('[info] amqp: connections clossed');
   }
 
   public getChannel(): Channel | null {

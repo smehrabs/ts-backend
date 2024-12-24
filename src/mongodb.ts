@@ -17,7 +17,7 @@ const CheckDynamicModel = (
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/require-await
   descriptor.value = async function (this: DbManager, ...args: any[]) {
     if (!this.dynamicModel) {
-      throw new Error('Dynamic model is not initialized.');
+      throw new Error('[error] mongodb: Dynamic model is not initialized.');
     }
     return originalMethod.apply(this, args);
   };
@@ -34,7 +34,7 @@ export class DbManager {
   public async connect(DbName?: string): Promise<void> {
     if (!this.connection) {
       const dbName: string = configs.EnvConfig.db || DbName || 'db';
-      console.log('Connecting to database:', dbName);
+      console.log('[info] mongodb: Connecting to database:', dbName);
       this.connection = await mongoose.connect(
         `mongodb://localhost:27017/${dbName}`
       );
@@ -51,7 +51,7 @@ export class DbManager {
     if (this.connection) {
       await this.connection.disconnect();
       this.connection = null;
-      console.log('Database connection closed.');
+      console.log('[info] mongodb: Database connection closed.');
     }
   }
 
@@ -60,7 +60,7 @@ export class DbManager {
   public async saveData(data: DynamicData | unknown): Promise<void> {
     const document = new this.dynamicModel!(data);
     await document.save();
-    console.log('Data saved:', document);
+    console.log('[info] mongodb: Data saved:', document);
   }
 
   @CatchErrors
@@ -71,7 +71,6 @@ export class DbManager {
     const documents: DynamicData[] = await this.dynamicModel!.find(
       query as any
     );
-    console.log('Fetched data:', documents);
     return documents;
   }
 }

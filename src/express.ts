@@ -20,7 +20,7 @@ export class ExpressManager {
     this.port = configs.EnvConfig.PORT || configs.Args.port || 3000;
     this.https = configs.Args.https;
 
-    console.log('debug: port: ' + this.port);
+    console.log('[info] express: port: ' + this.port);
 
     this.app = express();
 
@@ -73,7 +73,7 @@ export class ExpressManager {
   public async start(): Promise<void> {
     return new Promise((resolve, reject) => {
       const inlineApp = (https: boolean): void => {
-        console.log('Info: Server is running on port: ' + this.port);
+        console.log('[info] express: Server is running on port: ' + this.port);
         resolve();
 
         if (configs.Args.dev) {
@@ -114,8 +114,8 @@ export class ExpressManager {
       const possibleKeyPath = path.join(currentDir, 'keys', keyFileName);
       const possibleCertPath = path.join(currentDir, 'keys', certFileName);
 
-      console.log('debug key: ' + possibleKeyPath);
-      console.log('debug cert: ' + possibleCertPath);
+      console.log('[info] express: debug key: ' + possibleKeyPath);
+      console.log('[info] express: debug cert: ' + possibleCertPath);
 
       try {
         if (fs.existsSync(possibleKeyPath)) {
@@ -129,7 +129,9 @@ export class ExpressManager {
           break;
         }
       } catch (err: any) {
-        throw new Error('Error while checking files: ' + err.message);
+        throw new Error(
+          '[error] express: Error while checking files: ' + err.message
+        );
       }
 
       const parentDir = path.dirname(currentDir);
@@ -138,11 +140,15 @@ export class ExpressManager {
     }
 
     if (!keyFilePath) {
-      throw new Error('Private key file (private.key) is missing.');
+      throw new Error(
+        '[error] express: Private key file (private.key) is missing.'
+      );
     }
 
     if (!certFilePath) {
-      throw new Error('Certificate file (certificate.crt) is missing.');
+      throw new Error(
+        '[error] express: Certificate file (certificate.crt) is missing.'
+      );
     }
 
     return { key: keyFilePath, cert: certFilePath };
@@ -233,7 +239,9 @@ export class ExpressManager {
       if (!res.headersSent) {
         return originalSend(...args);
       } else {
-        log.warn('Attempted to send response after headers were sent.');
+        log.warn(
+          '[warn] express: Attempted to send response after headers were sent.'
+        );
         return res;
       }
     };
@@ -242,7 +250,9 @@ export class ExpressManager {
       if (!res.headersSent) {
         return originalJson(...args);
       } else {
-        log.warn('Attempted to send JSON response after headers were sent.');
+        log.warn(
+          '[warn] express: Attempted to send JSON response after headers were sent.'
+        );
         return res;
       }
     };
