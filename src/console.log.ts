@@ -86,32 +86,34 @@ class LRUCache<K, V> {
 
 const cache = new LRUCache<string, string>(250);
 
-console.log = (...args: any[]): void => {
-  if (!configs.Args.debug) {
-    return;
-  }
-
-  const coloredArgs = args.map((arg) => {
-    if (typeof arg === 'string') {
-      const cachedMessage = cache.get(arg);
-      if (cachedMessage) {
-        return cachedMessage;
-      }
-
-      if (
-        !/(\[.*?\]|\b(?:err|error|info|warn|debug|success|critical|app|start)\b)/i.test(
-          arg
-        )
-      ) {
-        return arg;
-      }
-
-      const processed = colorizeMessage(arg);
-      cache.set(arg, processed);
-      return processed;
+export const initLog = (debug: boolean): void => {
+  console.log = (...args: any[]): void => {
+    if (!debug) {
+      return;
     }
-    return arg;
-  });
 
-  originalConsoleLog.apply(console, coloredArgs);
+    const coloredArgs = args.map((arg) => {
+      if (typeof arg === 'string') {
+        const cachedMessage = cache.get(arg);
+        if (cachedMessage) {
+          return cachedMessage;
+        }
+
+        if (
+          !/(\[.*?\]|\b(?:err|error|info|warn|debug|success|critical|app|start)\b)/i.test(
+            arg
+          )
+        ) {
+          return arg;
+        }
+
+        const processed = colorizeMessage(arg);
+        cache.set(arg, processed);
+        return processed;
+      }
+      return arg;
+    });
+
+    originalConsoleLog.apply(console, coloredArgs);
+  };
 };

@@ -1,9 +1,8 @@
-import './console.log.js';
-
 import { Request, Response, Router } from 'express';
 
 import { AmqpManager } from './amqp.js';
 import { ConfigManager } from './config.js';
+import { initLog } from './console.log.js';
 import { cwd as CWD } from './cwd.js';
 import { ExpressManager } from './express.js';
 import { CustomLogger, LoggerManager } from './logger.js';
@@ -28,6 +27,7 @@ export abstract class Core {
     this.logger = new LoggerManager().getLogger();
     globalThis.log = this.logger;
     globalThis.configs = this.config;
+    initLog(configs.Args.debug);
     this.amqpManager = new AmqpManager();
     this.dbManager = new DbManager();
     this.expressManager = new ExpressManager();
@@ -73,6 +73,10 @@ new (class extends Core {
         // unique
         const id2 = await this.dbManager.saveData({ name: 'Bob', age: 25 });
         await this.dbManager.fetchDataById(id2);
+
+        await this.dbManager.updateDataById(id2, {
+          age: 31,
+        });
       })();
     }
   }
