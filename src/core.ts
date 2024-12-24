@@ -45,7 +45,7 @@ new (class extends Core {
     if (configs.Args.test) {
       console.log('[__info__] Application is starting...');
       void (async (): Promise<void> => {
-        await this.dbManager.connect();
+        await this.dbManager.connect('t1_test');
 
         await this.expressManager.start();
 
@@ -68,8 +68,11 @@ new (class extends Core {
 
         await this.dbManager.saveData(sampleData);
 
-        const results = await this.dbManager.fetchData({ age: { $gt: 20 } });
-        console.log('Results:', results);
+        await this.dbManager.fetchData({ age: { $gt: 20 } });
+
+        // unique
+        const id2 = await this.dbManager.saveData({ name: 'Bob', age: 25 });
+        await this.dbManager.fetchDataById(id2);
       })();
     }
   }

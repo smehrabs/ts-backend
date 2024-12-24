@@ -3,6 +3,7 @@ import mongoose, { Document, Model } from 'mongoose';
 import { CatchErrors } from './decorators.js';
 
 interface DynamicData extends Document {
+  _id: mongoose.Types.ObjectId;
   [key: string]: any;
 }
 
@@ -57,10 +58,11 @@ export class DbManager {
 
   @CatchErrors
   @CheckDynamicModel
-  public async saveData(data: DynamicData | unknown): Promise<void> {
-    const document = new this.dynamicModel!(data);
+  public async saveData(data: DynamicData | unknown): Promise<string> {
+    const document: DynamicData = new this.dynamicModel!(data);
     await document.save();
     console.log('[info] mongodb: Data saved:', document);
+    return document._id.toString();
   }
 
   @CatchErrors
@@ -71,6 +73,15 @@ export class DbManager {
     const documents: DynamicData[] = await this.dynamicModel!.find(
       query as any
     );
+    console.log('[info] mongodb: Fetched data:', documents);
     return documents;
+  }
+
+  @CatchErrors
+  @CheckDynamicModel
+  public async fetchDataById(id: string): Promise<DynamicData | null> {
+    const document: DynamicData | null = await this.dynamicModel!.findById(id);
+    console.log('[info] mongodb: Fetched data by ID:', document);
+    return document;
   }
 }
