@@ -84,4 +84,25 @@ export class DbManager {
     console.log('[info] mongodb: Fetched data by ID:', document);
     return document;
   }
+
+  @CatchErrors
+  @CheckDynamicModel
+  public async deleteDataById(id: string): Promise<DynamicData | null> {
+    const deletedDocument: DynamicData | null =
+      await this.dynamicModel!.findByIdAndDelete(id);
+    console.log('Deleted data:', deletedDocument);
+    return deletedDocument;
+  }
+
+  @CatchErrors
+  @CheckDynamicModel
+  public async updateDataById(
+    id: string,
+    data: Partial<DynamicData>
+  ): Promise<DynamicData | null> {
+    const updatedDocument: DynamicData | null =
+      await this.dynamicModel!.findByIdAndUpdate(id, data, { new: true });
+    console.log('Updated data:', updatedDocument);
+    return updatedDocument;
+  }
 }
