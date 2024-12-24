@@ -87,6 +87,10 @@ class LRUCache<K, V> {
 const cache = new LRUCache<string, string>(250);
 
 console.log = (...args: any[]): void => {
+  if (!configs.Args.debug) {
+    return;
+  }
+
   const coloredArgs = args.map((arg) => {
     if (typeof arg === 'string') {
       const cachedMessage = cache.get(arg);

@@ -37,9 +37,7 @@ export class LoggerManager {
         const formattedMessage =
           typeof message === 'object' ? JSON.stringify(message) : message;
         const customTimeMsg = `[${timestamp}] ${level}: '${formattedMessage}'`;
-        if (configs.Args.debug) {
-          console.log(customTimeMsg);
-        }
+        console.log(customTimeMsg);
         return customTimeMsg;
       }
     );
