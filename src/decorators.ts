@@ -27,6 +27,7 @@ export const CatchErrors = (
       return await originalMethod.apply(this, args);
     } catch (error) {
       log.error(`${propertyKey} failed:`, error);
+      throw new Error('[error] CatchErrors: ' + error);
     }
   };
 };
