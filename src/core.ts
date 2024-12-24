@@ -40,35 +40,38 @@ export abstract class Core {
 
 // Test
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-(class extends Core {
+new (class extends Core {
   public Main(): void {
-    console.log('[__info__] Application is starting...');
-    this.logger.info('Debug mode');
-    void (async (): Promise<void> => {
-      await this.dbManager.connect();
+    if (configs.Args.test) {
+      console.log('[__info__] Application is starting...');
+      this.logger.info('Debug mode');
+      void (async (): Promise<void> => {
+        await this.dbManager.connect();
 
-      await this.expressManager.start();
+        await this.expressManager.start();
 
-      const router = Router();
+        const router = Router();
 
-      router.get('/test', (_req: Request, res: Response) => {
-        res.status(200).send('hi');
-      });
+        router.get('/test', (_req: Request, res: Response) => {
+          res.status(200).send('hi');
+        });
 
-      void this.expressManager.addRoute('/', router);
+        void this.expressManager.addRoute('/', router);
 
-      // const sampleData = {
-      //   name: 'John',
-      //   age: 30,
-      //   address: {
-      //     city: 'NYC',
-      //     zip: '10001',
-      //   },
-      // }
+        const sampleData = {
+          name: 'John',
+          age: 30,
+          address: {
+            city: 'NYC',
+            zip: '10001',
+          },
+        };
 
-      // await this.dbManager.saveData(sampleData)
+        await this.dbManager.saveData(sampleData);
 
-      // await this.dbManager.fetchData()
-    })();
+        const results = await this.dbManager.fetchData({ age: { $gt: 20 } });
+        console.log('Results:', results);
+      })();
+    }
   }
-});
+})();
