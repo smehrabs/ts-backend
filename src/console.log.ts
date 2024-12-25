@@ -1,3 +1,5 @@
+import { CustomLogger } from './logger.js';
+
 enum LogColor {
   Default = '\x1b[0m',
   Bold = '\x1b[1m',
@@ -86,7 +88,7 @@ class LRUCache<K, V> {
 
 const cache = new LRUCache<string, string>(250);
 
-export const initLog = (debug: boolean): void => {
+export const initLog = (debug: boolean, logger: CustomLogger): void => {
   console.log = (...args: any[]): void => {
     if (!debug) {
       return;
@@ -99,21 +101,46 @@ export const initLog = (debug: boolean): void => {
           return cachedMessage;
         }
 
-        if (
-          !/(\[.*?\]|\b(?:err|error|info|warn|debug|success|critical|app|start)\b)/i.test(
-            arg
-          )
-        ) {
-          return arg;
-        }
+        const isErrorMessage = /(\berr\b|\berror\b)/i.test(arg);
+        const isWarningMessage = /\bwarn\b/i.test(arg);
+        const isInfoMessage = /\binfo\b/i.test(arg);
+        const isDebugMessage = /\bdebug\b/i.test(arg);
+        const isCoreMessage = /\bcore\b/i.test(arg);
 
         const processed = colorizeMessage(arg);
         cache.set(arg, processed);
-        return processed;
+
+        if (isErrorMessage) {
+          logger.error(arg);
+          console.error(processed);
+        } else if (isWarningMessage) {
+          logger.warn(arg);
+          console.warn(processed);
+        } else if (isInfoMessage) {
+          logger.info(arg);
+          console.info(processed);
+        } else if (isDebugMessage) {
+          logger.debug(arg);
+          console.debug(processed);
+        } else if (isCoreMessage) {
+          logger.core(arg);
+          console.log(processed);
+        } else {
+          logger.info(arg);
+          return processed;
+        }
       }
       return arg;
     });
 
-    originalConsoleLog.apply(console, coloredArgs);
+    if (
+      !coloredArgs.some(
+        (arg) =>
+          typeof arg === 'string' &&
+          /\berr\b|\berror\b|\bwarn\b|\binfo\b|\bdebug\b/i.test(arg)
+      )
+    ) {
+      originalConsoleLog.apply(console, coloredArgs);
+    }
   };
 };

@@ -36,9 +36,7 @@ export class LoggerManager {
       ({ timestamp, level, message }) => {
         const formattedMessage =
           typeof message === 'object' ? JSON.stringify(message) : message;
-        const customTimeMsg = `[${timestamp}] ${level}: '${formattedMessage}'`;
-        console.log(customTimeMsg);
-        return customTimeMsg;
+        return `[${timestamp}] ${level}: '${formattedMessage}'`;
       }
     );
 

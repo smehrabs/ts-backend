@@ -25,9 +25,8 @@ export abstract class Core {
     globalThis.cwd = CWD;
     this.config = new ConfigManager();
     this.logger = new LoggerManager().getLogger();
-    globalThis.log = this.logger;
     globalThis.configs = this.config;
-    initLog(configs.Args.debug);
+    initLog(configs.Args.debug, this.logger);
     this.amqpManager = new AmqpManager();
     this.dbManager = new DbManager();
     this.expressManager = new ExpressManager();
