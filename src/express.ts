@@ -203,7 +203,7 @@ export class ExpressManager {
   ): void => {
     const startTime = Date.now();
 
-    log.info({
+    console.log({
       method: req.method,
       url: req.url,
       headers: req.headers,
@@ -216,7 +216,7 @@ export class ExpressManager {
 
     res.on('finish', () => {
       const duration = Date.now() - startTime;
-      log.info({
+      console.log({
         message: 'Response sent',
         statusCode: res.statusCode,
         duration: `${duration}ms`,
@@ -239,7 +239,7 @@ export class ExpressManager {
       if (!res.headersSent) {
         return originalSend(...args);
       } else {
-        log.warn(
+        console.log(
           '[warn] express: Attempted to send response after headers were sent.'
         );
         return res;
@@ -250,7 +250,7 @@ export class ExpressManager {
       if (!res.headersSent) {
         return originalJson(...args);
       } else {
-        log.warn(
+        console.log(
           '[warn] express: Attempted to send JSON response after headers were sent.'
         );
         return res;

@@ -124,7 +124,7 @@ export const initLog = (debug: boolean, logger: CustomLogger): void => {
           console.debug(processed);
         } else if (isCoreMessage) {
           logger.core(arg);
-          console.log(processed);
+          return processed;
         } else {
           logger.info(arg);
           return processed;

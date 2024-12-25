@@ -43,6 +43,7 @@ new (class extends Core {
   public Main(): void {
     if (configs.Args.test) {
       console.log('[__info__] Application is starting...');
+      console.log('core');
       void (async (): Promise<void> => {
         await this.dbManager.connect('t1_test');
 
@@ -76,7 +77,7 @@ new (class extends Core {
         await this.dbManager.updateDataById(id2, {
           age: 31,
         });
-      })();
+      });
     }
   }
 })();
