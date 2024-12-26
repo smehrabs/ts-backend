@@ -19,7 +19,7 @@ export abstract class Core {
   public constructor() {
     if (new.target === Core) {
       throw new Error(
-        'Core cannot be instantiated directly. Please extend it.'
+        '[core] cannot be instantiated directly. Please extend it.'
       );
     }
     globalThis.cwd = CWD;
@@ -42,8 +42,7 @@ export abstract class Core {
 new (class extends Core {
   public Main(): void {
     if (configs.Args.test) {
-      console.log('[__info__] Application is starting...');
-      console.log('core');
+      console.log('[core] Application is starting...');
       void (async (): Promise<void> => {
         await this.dbManager.connect('t1_test');
 

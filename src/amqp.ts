@@ -22,7 +22,7 @@ export class AmqpManager {
     if (this.channel) await this.channel.close();
     if (this.connection) await this.connection.close();
 
-    console.log('[info] amqp: connections clossed');
+    console.log('[info] amqp: connections closed');
   }
 
   public getChannel(): Channel | null {

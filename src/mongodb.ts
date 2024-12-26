@@ -35,7 +35,7 @@ export class DbManager {
   public async connect(DbName?: string): Promise<void> {
     if (!this.connection) {
       const dbName: string = configs.EnvConfig.db || DbName || 'db';
-      console.log('[info] mongodb: Connecting to database:', dbName);
+      console.log('[core] mongodb: Connecting to database:', dbName);
       this.connection = await mongoose.connect(
         `mongodb://localhost:27017/${dbName}`
       );
@@ -52,7 +52,7 @@ export class DbManager {
     if (this.connection) {
       await this.connection.disconnect();
       this.connection = null;
-      console.log('[info] mongodb: Database connection closed.');
+      console.log('[core] mongodb: Database connection closed.');
     }
   }
 
@@ -61,7 +61,7 @@ export class DbManager {
   public async saveData(data: DynamicData | unknown): Promise<string> {
     const document: DynamicData = new this.dynamicModel!(data);
     await document.save();
-    console.log('[info] mongodb: Data saved:', document);
+    console.log('[core] mongodb: Data saved:', document);
     return document._id.toString();
   }
 
@@ -73,7 +73,7 @@ export class DbManager {
     const documents: DynamicData[] = await this.dynamicModel!.find(
       query as any
     );
-    console.log('[info] mongodb: Fetched data:', documents);
+    console.log('[core] mongodb: Fetched data:', documents);
     return documents;
   }
 
@@ -81,7 +81,7 @@ export class DbManager {
   @CheckDynamicModel
   public async fetchDataById(id: string): Promise<DynamicData | null> {
     const document: DynamicData | null = await this.dynamicModel!.findById(id);
-    console.log('[info] mongodb: Fetched data by ID:', document);
+    console.log('[core] mongodb: Fetched data by ID:', document);
     return document;
   }
 
@@ -90,7 +90,7 @@ export class DbManager {
   public async deleteDataById(id: string): Promise<DynamicData | null> {
     const deletedDocument: DynamicData | null =
       await this.dynamicModel!.findByIdAndDelete(id);
-    console.log('Deleted data:', deletedDocument);
+    console.log('[core] mongodb: Deleted data:', deletedDocument);
     return deletedDocument;
   }
 
@@ -102,7 +102,7 @@ export class DbManager {
   ): Promise<DynamicData | null> {
     const updatedDocument: DynamicData | null =
       await this.dynamicModel!.findByIdAndUpdate(id, data, { new: true });
-    console.log('Updated data:', updatedDocument);
+    console.log('[core] mongodb: Updated data:', updatedDocument);
     return updatedDocument;
   }
 }

@@ -20,8 +20,6 @@ export class ExpressManager {
     this.port = configs.EnvConfig.PORT || configs.Args.port || 3000;
     this.https = configs.Args.https;
 
-    console.log('[info] express: port: ' + this.port);
-
     this.app = express();
 
     this.localhostMover();
@@ -73,7 +71,7 @@ export class ExpressManager {
   public async start(): Promise<void> {
     return new Promise((resolve, reject) => {
       const inlineApp = (https: boolean): void => {
-        console.log('[info] express: Server is running on port: ' + this.port);
+        console.log('[core] express: Server is running on port: ' + this.port);
         resolve();
 
         if (configs.Args.dev) {
@@ -114,8 +112,8 @@ export class ExpressManager {
       const possibleKeyPath = path.join(currentDir, 'keys', keyFileName);
       const possibleCertPath = path.join(currentDir, 'keys', certFileName);
 
-      console.log('[info] express: debug key: ' + possibleKeyPath);
-      console.log('[info] express: debug cert: ' + possibleCertPath);
+      console.log('[core] express: debug key: ' + possibleKeyPath);
+      console.log('[core] express: debug cert: ' + possibleCertPath);
 
       try {
         if (fs.existsSync(possibleKeyPath)) {
