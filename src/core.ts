@@ -42,7 +42,7 @@ export abstract class Core {
 new (class extends Core {
   public Main(): void {
     if (configs.Args.test) {
-      console.log('[core] ~{gold}`Application is starting`...');
+      console.log('[core] ~{19}`Application is starting`...');
       console.log('[core warn] test');
       console.log('[error] some err');
       void (async (): Promise<void> => {

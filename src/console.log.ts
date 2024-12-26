@@ -11,6 +11,7 @@ const colorMapping: Record<string, (...args: any[]) => string> = {
   debug: chalk.blue,
   success: chalk.cyan,
   critical: chalk.bgRed.white,
+  core: chalk.bgRed.white,
 
   lava: chalk.hex('#c21e56'), // Custom color
   sky: chalk.hex('#76aaff'), // Custom color
@@ -59,14 +60,36 @@ const colorMapping: Record<string, (...args: any[]) => string> = {
   doubleunderline: chalk.underline.bold,
 };
 
+const specialWords: string[] = [
+  'info',
+  'warn',
+  'error',
+  'success',
+  'debug',
+  'core',
+];
+
 const colorizeMessage = (message: string): string => {
   const regex = /~{(.*?)}`(.*?)`/g;
-
-  // Apply custom styles (e.g., `~{Green}` syntax)
-  return message.replace(regex, (_match, colorName, text) => {
+  message = message.replace(regex, (_match, colorName, text) => {
     const colorFn = colorMapping[colorName as keyof typeof colorMapping];
     return colorFn ? colorFn(text) : text;
   });
+
+  const wordRegex = new RegExp(`\\b(${specialWords.join('|')})\\b`, 'gi');
+  message = message.replace(wordRegex, (match) => {
+    const colorFn =
+      colorMapping[match.toLowerCase() as keyof typeof colorMapping];
+    return colorFn ? colorFn(match) : match;
+  });
+
+  return message;
+};
+
+export const addSpecialWord = (word: string): void => {
+  if (!specialWords.includes(word)) {
+    specialWords.push(word);
+  }
 };
 
 export const initLog = (debug: boolean, logger: CustomLogger): void => {
