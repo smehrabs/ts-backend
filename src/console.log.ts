@@ -1,194 +1,100 @@
-/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
+import chalk from 'chalk';
 import { LRUCache } from 'lru-cache';
 
 import { CustomLogger } from './logger.js';
 
-enum LogColor {
-  Default = '\x1b[0m',
-  Bold = '\x1b[1m',
-  Italic = '\x1b[3m',
-  Underline = '\x1b[4m',
-  Blink = '\x1b[5m',
-  Reverse = '\x1b[7m',
-  Hidden = '\x1b[8m',
-  Red = '\x1b[31m',
-  Green = '\x1b[32m',
-  Yellow = '\x1b[33m',
-  Blue = '\x1b[34m',
-  Magenta = '\x1b[35m',
-  Cyan = '\x1b[36m',
-  White = '\x1b[37m',
+const colorMapping: Record<string, (...args: any[]) => string> = {
+  err: chalk.red,
+  error: chalk.red,
+  info: chalk.green,
+  warn: chalk.yellow,
+  debug: chalk.blue,
+  success: chalk.cyan,
+  critical: chalk.bgRed.white,
 
-  // Bright Colors
-  BrR = '\x1b[91m',
-  BrG = '\x1b[92m',
-  BrY = '\x1b[93m',
-  BrB = '\x1b[94m',
-  BrM = '\x1b[95m',
-  BrC = '\x1b[96m',
-  BrW = '\x1b[97m',
+  lava: chalk.hex('#c21e56'), // Custom color
+  sky: chalk.hex('#76aaff'), // Custom color
+  forest: chalk.hex('#228b22'), // Custom color
+  sunset: chalk.hex('#fd5e53'), // Custom color
+  ocean: chalk.hex('#4f83cc'), // Custom color
+  violet: chalk.hex('#9b59b6'), // Custom color
+  peach: chalk.hex('#ffb6b9'), // Custom color
+  mint: chalk.hex('#98ff98'), // Custom color
+  gold: chalk.hex('#ffd700'), // Custom color
+  silver: chalk.hex('#c0c0c0'), // Custom color
 
-  // Extended Colors
-  SpB = '\x1b[38;5;39m', // Special Blue
-  FrW = '\x1b[38;5;255m', // Frost White
-  MiP = '\x1b[38;5;93m', // Midnight Purple
-  AuG = '\x1b[38;5;46m', // Autumn Green
-  IcC = '\x1b[38;5;51m', // Ice Cyan
-  TwM = '\x1b[38;5;125m', // Twilight Magenta
-  WiG = '\x1b[38;5;240m', // Winter Gray
-  NeP = '\x1b[38;5;200m', // Neon Pink
-
-  // New Custom Colors
-  LavaRed = '\x1b[38;5;196m',
-  SkyBlue = '\x1b[38;5;117m',
-  ForestGreen = '\x1b[38;5;22m',
-  SunsetOrange = '\x1b[38;5;202m',
-  OceanBlue = '\x1b[38;5;75m',
-  Violet = '\x1b[38;5;177m',
-  Peach = '\x1b[38;5;216m',
-  Mint = '\x1b[38;5;121m',
-  Gold = '\x1b[38;5;220m',
-  Silver = '\x1b[38;5;247m',
-
-  // Extra Styles
-  StrikeThrough = '\x1b[9m',
-  Overline = '\x1b[53m',
-  DoubleUnderline = '\x1b[21m',
-}
-
-const colorMapping: Record<string, LogColor> = {
-  // Basic Mappings
-  err: LogColor.Red,
-  error: LogColor.Red,
-  info: LogColor.Green,
-  warn: LogColor.Yellow,
-  debug: LogColor.Blue,
-  success: LogColor.Cyan,
-  critical: LogColor.BrR,
-
-  // New Keywords
-  lava: LogColor.LavaRed,
-  sky: LogColor.SkyBlue,
-  forest: LogColor.ForestGreen,
-  sunset: LogColor.SunsetOrange,
-  ocean: LogColor.OceanBlue,
-  violet: LogColor.Violet,
-  peach: LogColor.Peach,
-  mint: LogColor.Mint,
-  gold: LogColor.Gold,
-  silver: LogColor.Silver,
-
-  // Numbers 1-100 as examples
-  '1': LogColor.Red,
-  '2': LogColor.Green,
-  '3': LogColor.Yellow,
-  '4': LogColor.Blue,
-  '5': LogColor.Magenta,
-  '6': LogColor.Cyan,
-  '7': LogColor.White,
-  '8': LogColor.BrR,
-  '9': LogColor.BrG,
-  '10': LogColor.BrY,
-  '11': LogColor.BrB,
-  '12': LogColor.BrM,
-  '13': LogColor.BrC,
-  '14': LogColor.BrW,
-  '15': LogColor.SpB,
-  '16': LogColor.FrW,
-  '17': LogColor.MiP,
-  '18': LogColor.AuG,
-  '19': LogColor.IcC,
-  '20': LogColor.TwM,
-  '21': LogColor.WiG,
-  '22': LogColor.NeP,
-  '23': LogColor.LavaRed,
-  '24': LogColor.SkyBlue,
-  '25': LogColor.ForestGreen,
-  '26': LogColor.SunsetOrange,
-  '27': LogColor.OceanBlue,
-  '28': LogColor.Violet,
-  '29': LogColor.Peach,
-  '30': LogColor.Mint,
-  '31': LogColor.Gold,
-  '32': LogColor.Silver,
+  // Levels with number mapping
+  '1': chalk.red,
+  '2': chalk.green,
+  '3': chalk.yellow,
+  '4': chalk.blue,
+  '5': chalk.magenta,
+  '6': chalk.cyan,
+  '7': chalk.white,
+  '8': chalk.bgRed.white,
+  '9': chalk.bgGreen.white,
+  '10': chalk.bgYellow.white,
+  '11': chalk.bgBlue.white,
+  '12': chalk.bgMagenta.white,
+  '13': chalk.bgCyan.white,
+  '14': chalk.bgWhite.black,
+  '15': chalk.bgBlue.white,
+  '16': chalk.bgWhite.black,
+  '17': chalk.hex('#93A8C6'), // Frost white
+  '18': chalk.hex('#B45F06'), // Autumn Green
+  '19': chalk.hex('#51B4D1'), // Ice Cyan
+  '20': chalk.hex('#745EB0'), // Twilight Magenta
+  '21': chalk.hex('#4B4E53'), // Winter Gray
+  '22': chalk.hex('#FB59BB'), // Neon Pink
 
   // Styles
-  bold: LogColor.Bold,
-  italic: LogColor.Italic,
-  underline: LogColor.Underline,
-  blink: LogColor.Blink,
-  reverse: LogColor.Reverse,
-  hidden: LogColor.Hidden,
-  strikethrough: LogColor.StrikeThrough,
-  overline: LogColor.Overline,
-  doubleunderline: LogColor.DoubleUnderline,
-};
-
-const colorizeWord = (word: string): string => {
-  const lowerCaseWord = word.toLowerCase();
-  for (const [key, color] of Object.entries(colorMapping)) {
-    if (lowerCaseWord.includes(key)) {
-      return `${color}${word}${LogColor.Default}`;
-    }
-  }
-  return word;
+  bold: chalk.bold,
+  italic: chalk.italic,
+  underline: chalk.underline,
+  blink: chalk.bgYellow.black,
+  reverse: chalk.inverse,
+  hidden: chalk.hidden,
+  strikethrough: chalk.strikethrough,
+  overline: chalk.overline,
+  doubleunderline: chalk.underline.bold,
 };
 
 const colorizeMessage = (message: string): string => {
   const regex = /~{(.*?)}`(.*?)`/g;
 
-  const colorizedMessage = message.split(' ').map(colorizeWord).join(' ');
-
-  return colorizedMessage.replace(regex, (_match, colorName, text) => {
-    const color = LogColor[colorName as keyof typeof LogColor];
-    const styledText = color ? `${color}${text}${LogColor.Default}` : text;
-    return styledText;
+  // Apply custom styles (e.g., `~{Green}` syntax)
+  return message.replace(regex, (_match, colorName, text) => {
+    const colorFn = colorMapping[colorName as keyof typeof colorMapping];
+    return colorFn ? colorFn(text) : text;
   });
 };
 
-// 'This is a ~{Italic}`Italic text`, and this is a ~{Green}`green text`, and this is a normal message. [info] __ ~{sp}`Salam`';
-
-const originalConsoleLog = console.log;
-
-const options = {
-  max: 250,
-};
-
-const cache = new LRUCache<string, string>(options);
-
 export const initLog = (debug: boolean, logger: CustomLogger): void => {
+  const originalConsoleLog = console.log;
+  const cache = new LRUCache<string, string>({ max: 250 });
+
+  const levelMapping: Record<string, (msg: string) => void> = {
+    err: logger.error.bind(logger),
+    error: logger.error.bind(logger),
+    warn: logger.warn.bind(logger),
+    info: logger.info.bind(logger),
+    debug: logger.debug.bind(logger),
+    core: logger.core.bind(logger),
+  };
+
   console.log = (...args: any[]): void => {
-    if (!debug) {
-      return;
-    }
+    if (!debug) return;
 
     const coloredArgs = args.map((arg) => {
       if (typeof arg === 'string') {
         const cachedMessage = cache.get(arg);
-        if (cachedMessage) {
-          return cachedMessage;
-        }
+        if (cachedMessage) return cachedMessage;
 
-        // level of Logger class
-        const isErrorMessage = /(\berr\b|\berror\b)/i.test(arg);
-        const isWarningMessage = /\bwarn\b/i.test(arg);
-        const isInfoMessage = /\binfo\b/i.test(arg);
-        const isDebugMessage = /\bdebug\b/i.test(arg);
-        const isCoreMessage = /\bcore\b/i.test(arg);
-
-        if (isErrorMessage) {
-          logger.error(arg);
-        } else if (isWarningMessage) {
-          logger.warn(arg);
-        } else if (isInfoMessage) {
-          logger.info(arg);
-        } else if (isDebugMessage) {
-          logger.debug(arg);
-        } else if (isCoreMessage) {
-          logger.core(arg);
-        } else {
-          logger.info(arg);
-        }
+        const level =
+          Object.keys(levelMapping).find((key) =>
+            new RegExp(`\\b${key}\\b`, 'i').test(arg)
+          ) || 'info';
+        levelMapping[level](arg);
 
         const processed = colorizeMessage(arg);
         cache.set(arg, processed);
@@ -197,6 +103,6 @@ export const initLog = (debug: boolean, logger: CustomLogger): void => {
       return arg;
     });
 
-    originalConsoleLog.apply(console, coloredArgs);
+    originalConsoleLog(...coloredArgs);
   };
 };
