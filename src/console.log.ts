@@ -146,10 +146,7 @@ const colorizeMessage = (message: string): string => {
   });
 };
 
-// مثال استفاده
-const message =
-  'This is a ~{Italic}`Italic text`, and this is a ~{Green}`green text`, and this is a normal message. [info] __ ~{sp}`Salam`';
-console.log(colorizeMessage(message));
+// 'This is a ~{Italic}`Italic text`, and this is a ~{Green}`green text`, and this is a normal message. [info] __ ~{sp}`Salam`';
 
 const originalConsoleLog = console.log;
 
@@ -172,46 +169,34 @@ export const initLog = (debug: boolean, logger: CustomLogger): void => {
           return cachedMessage;
         }
 
+        // level of Logger class
         const isErrorMessage = /(\berr\b|\berror\b)/i.test(arg);
         const isWarningMessage = /\bwarn\b/i.test(arg);
         const isInfoMessage = /\binfo\b/i.test(arg);
         const isDebugMessage = /\bdebug\b/i.test(arg);
         const isCoreMessage = /\bcore\b/i.test(arg);
 
-        const processed = colorizeMessage(arg);
-        cache.set(arg, processed);
-
         if (isErrorMessage) {
           logger.error(arg);
-          console.error(processed);
         } else if (isWarningMessage) {
           logger.warn(arg);
-          console.warn(processed);
         } else if (isInfoMessage) {
           logger.info(arg);
-          console.info(processed);
         } else if (isDebugMessage) {
           logger.debug(arg);
-          console.debug(processed);
         } else if (isCoreMessage) {
           logger.core(arg);
-          return processed;
         } else {
           logger.info(arg);
-          return processed;
         }
+
+        const processed = colorizeMessage(arg);
+        cache.set(arg, processed);
+        return processed;
       }
       return arg;
     });
 
-    if (
-      !coloredArgs.some(
-        (arg) =>
-          typeof arg === 'string' &&
-          /\berr\b|\berror\b|\bwarn\b|\binfo\b|\bdebug\b/i.test(arg)
-      )
-    ) {
-      originalConsoleLog.apply(console, coloredArgs);
-    }
+    originalConsoleLog.apply(console, coloredArgs);
   };
 };
