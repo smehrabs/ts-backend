@@ -18,13 +18,8 @@ enum LogColor {
   Magenta = '\x1b[35m',
   Cyan = '\x1b[36m',
   White = '\x1b[37m',
-  R = '\x1b[31m',
-  G = '\x1b[32m',
-  Y = '\x1b[33m',
-  B = '\x1b[34m',
-  M = '\x1b[35m',
-  C = '\x1b[36m',
-  W = '\x1b[37m',
+
+  // Bright Colors
   BrR = '\x1b[91m',
   BrG = '\x1b[92m',
   BrY = '\x1b[93m',
@@ -32,33 +27,65 @@ enum LogColor {
   BrM = '\x1b[95m',
   BrC = '\x1b[96m',
   BrW = '\x1b[97m',
-  SpB = '\x1b[38;5;39m',
-  FrW = '\x1b[38;5;255m',
-  MiP = '\x1b[38;5;93m',
-  AuG = '\x1b[38;5;46m',
-  IcC = '\x1b[38;5;51m',
-  TwM = '\x1b[38;5;125m',
-  WiG = '\x1b[38;5;240m',
-  NeP = '\x1b[38;5;200m',
+
+  // Extended Colors
+  SpB = '\x1b[38;5;39m', // Special Blue
+  FrW = '\x1b[38;5;255m', // Frost White
+  MiP = '\x1b[38;5;93m', // Midnight Purple
+  AuG = '\x1b[38;5;46m', // Autumn Green
+  IcC = '\x1b[38;5;51m', // Ice Cyan
+  TwM = '\x1b[38;5;125m', // Twilight Magenta
+  WiG = '\x1b[38;5;240m', // Winter Gray
+  NeP = '\x1b[38;5;200m', // Neon Pink
+
+  // New Custom Colors
+  LavaRed = '\x1b[38;5;196m',
+  SkyBlue = '\x1b[38;5;117m',
+  ForestGreen = '\x1b[38;5;22m',
+  SunsetOrange = '\x1b[38;5;202m',
+  OceanBlue = '\x1b[38;5;75m',
+  Violet = '\x1b[38;5;177m',
+  Peach = '\x1b[38;5;216m',
+  Mint = '\x1b[38;5;121m',
+  Gold = '\x1b[38;5;220m',
+  Silver = '\x1b[38;5;247m',
+
+  // Extra Styles
+  StrikeThrough = '\x1b[9m',
+  Overline = '\x1b[53m',
+  DoubleUnderline = '\x1b[21m',
 }
 
 const colorMapping: Record<string, LogColor> = {
-  err: LogColor.R,
-  error: LogColor.R,
-  info: LogColor.G,
-  warn: LogColor.Y,
-  debug: LogColor.B,
-  success: LogColor.C,
+  // Basic Mappings
+  err: LogColor.Red,
+  error: LogColor.Red,
+  info: LogColor.Green,
+  warn: LogColor.Yellow,
+  debug: LogColor.Blue,
+  success: LogColor.Cyan,
   critical: LogColor.BrR,
-  app: LogColor.G,
-  start: LogColor.BrG,
-  '1': LogColor.R,
-  '2': LogColor.G,
-  '3': LogColor.Y,
-  '4': LogColor.B,
-  '5': LogColor.M,
-  '6': LogColor.C,
-  '7': LogColor.W,
+
+  // New Keywords
+  lava: LogColor.LavaRed,
+  sky: LogColor.SkyBlue,
+  forest: LogColor.ForestGreen,
+  sunset: LogColor.SunsetOrange,
+  ocean: LogColor.OceanBlue,
+  violet: LogColor.Violet,
+  peach: LogColor.Peach,
+  mint: LogColor.Mint,
+  gold: LogColor.Gold,
+  silver: LogColor.Silver,
+
+  // Numbers 1-100 as examples
+  '1': LogColor.Red,
+  '2': LogColor.Green,
+  '3': LogColor.Yellow,
+  '4': LogColor.Blue,
+  '5': LogColor.Magenta,
+  '6': LogColor.Cyan,
+  '7': LogColor.White,
   '8': LogColor.BrR,
   '9': LogColor.BrG,
   '10': LogColor.BrY,
@@ -66,20 +93,35 @@ const colorMapping: Record<string, LogColor> = {
   '12': LogColor.BrM,
   '13': LogColor.BrC,
   '14': LogColor.BrW,
+  '15': LogColor.SpB,
+  '16': LogColor.FrW,
+  '17': LogColor.MiP,
+  '18': LogColor.AuG,
+  '19': LogColor.IcC,
+  '20': LogColor.TwM,
+  '21': LogColor.WiG,
+  '22': LogColor.NeP,
+  '23': LogColor.LavaRed,
+  '24': LogColor.SkyBlue,
+  '25': LogColor.ForestGreen,
+  '26': LogColor.SunsetOrange,
+  '27': LogColor.OceanBlue,
+  '28': LogColor.Violet,
+  '29': LogColor.Peach,
+  '30': LogColor.Mint,
+  '31': LogColor.Gold,
+  '32': LogColor.Silver,
+
+  // Styles
   bold: LogColor.Bold,
   italic: LogColor.Italic,
   underline: LogColor.Underline,
   blink: LogColor.Blink,
   reverse: LogColor.Reverse,
   hidden: LogColor.Hidden,
-  sp: LogColor.SpB,
-  fr: LogColor.FrW,
-  mi: LogColor.MiP,
-  au: LogColor.AuG,
-  ic: LogColor.IcC,
-  tw: LogColor.TwM,
-  wi: LogColor.WiG,
-  ne: LogColor.NeP,
+  strikethrough: LogColor.StrikeThrough,
+  overline: LogColor.Overline,
+  doubleunderline: LogColor.DoubleUnderline,
 };
 
 const colorizeWord = (word: string): string => {
