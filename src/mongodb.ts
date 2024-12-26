@@ -2,10 +2,10 @@ import mongoose, { Document, Model } from 'mongoose';
 
 import { CatchErrors } from './decorators.js';
 
-interface DynamicData extends Document {
-  _id: mongoose.Types.ObjectId;
-  [key: string]: any;
-}
+type DynamicData = {
+  readonly [x: string]: any; // Allow additional properties
+  _id: mongoose.Types.ObjectId; // Ensure _id is of the correct type
+} & Document;
 
 const CheckDynamicModel = (
   _target: any,
@@ -75,6 +75,31 @@ export class DbManager {
     );
     console.log('[core] mongodb: Fetched data:', documents);
     return documents;
+  }
+
+  @CatchErrors
+  @CheckDynamicModel
+  public async fetchDataWithPaging(
+    limit: number = 10,
+    page: number = 1
+  ): Promise<DynamicData[]> {
+    const query = this.dynamicModel!.find();
+
+    if (limit > 0) {
+      query.limit(limit); // Limits the number of items if a valid limit is provided.
+    }
+
+    if (page > 0) {
+      query.skip((page - 1) * (limit > 0 ? limit : 10)); // Skips items for pagination.
+    }
+
+    const items = await query.lean(); // Fetches items as plain JavaScript objects.
+
+    // Ensure that items are of type DynamicData[]
+    const typedItems: DynamicData[] = items as DynamicData[];
+
+    console.log('[core] mongodb: Fetched data:', typedItems);
+    return typedItems;
   }
 
   @CatchErrors
