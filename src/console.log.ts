@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 import { LRUCache } from 'lru-cache';
 
 import { CustomLogger } from './logger.js';
@@ -17,62 +18,69 @@ enum LogColor {
   Magenta = '\x1b[35m',
   Cyan = '\x1b[36m',
   White = '\x1b[37m',
-  BrightRed = '\x1b[91m',
-  BrightGreen = '\x1b[92m',
-  BrightYellow = '\x1b[93m',
-  BrightBlue = '\x1b[94m',
-  BrightMagenta = '\x1b[95m',
-  BrightCyan = '\x1b[96m',
-  BrightWhite = '\x1b[97m',
-  LightOrange = '\x1b[38;5;214m',
-  // اضافه کردن رنگ‌های بیشتر
-  DarkRed = '\x1b[38;5;124m',
-  DarkGreen = '\x1b[38;5;22m',
-  DarkYellow = '\x1b[38;5;130m',
-  DarkBlue = '\x1b[38;5;24m',
-  DarkMagenta = '\x1b[38;5;125m',
-  DarkCyan = '\x1b[38;5;36m',
+  R = '\x1b[31m',
+  G = '\x1b[32m',
+  Y = '\x1b[33m',
+  B = '\x1b[34m',
+  M = '\x1b[35m',
+  C = '\x1b[36m',
+  W = '\x1b[37m',
+  BrR = '\x1b[91m',
+  BrG = '\x1b[92m',
+  BrY = '\x1b[93m',
+  BrB = '\x1b[94m',
+  BrM = '\x1b[95m',
+  BrC = '\x1b[96m',
+  BrW = '\x1b[97m',
+  SpB = '\x1b[38;5;39m',
+  FrW = '\x1b[38;5;255m',
+  MiP = '\x1b[38;5;93m',
+  AuG = '\x1b[38;5;46m',
+  IcC = '\x1b[38;5;51m',
+  TwM = '\x1b[38;5;125m',
+  WiG = '\x1b[38;5;240m',
+  NeP = '\x1b[38;5;200m',
 }
 
 const colorMapping: Record<string, LogColor> = {
-  err: LogColor.Red,
-  error: LogColor.Red,
-  info: LogColor.Green,
-  warn: LogColor.Yellow,
-  debug: LogColor.Blue,
-  success: LogColor.Cyan,
-  critical: LogColor.BrightRed,
-  app: LogColor.Green,
-  start: LogColor.BrightGreen,
-  // اضافه کردن نگاشت برای رنگ‌ها با عدد
-  '1': LogColor.Red,
-  '2': LogColor.Green,
-  '3': LogColor.Yellow,
-  '4': LogColor.Blue,
-  '5': LogColor.Magenta,
-  '6': LogColor.Cyan,
-  '7': LogColor.White,
-  '8': LogColor.BrightRed,
-  '9': LogColor.BrightGreen,
-  '10': LogColor.BrightYellow,
-  '11': LogColor.BrightBlue,
-  '12': LogColor.BrightMagenta,
-  '13': LogColor.BrightCyan,
-  '14': LogColor.BrightWhite,
-  // اضافه کردن استایل‌ها
+  err: LogColor.R,
+  error: LogColor.R,
+  info: LogColor.G,
+  warn: LogColor.Y,
+  debug: LogColor.B,
+  success: LogColor.C,
+  critical: LogColor.BrR,
+  app: LogColor.G,
+  start: LogColor.BrG,
+  '1': LogColor.R,
+  '2': LogColor.G,
+  '3': LogColor.Y,
+  '4': LogColor.B,
+  '5': LogColor.M,
+  '6': LogColor.C,
+  '7': LogColor.W,
+  '8': LogColor.BrR,
+  '9': LogColor.BrG,
+  '10': LogColor.BrY,
+  '11': LogColor.BrB,
+  '12': LogColor.BrM,
+  '13': LogColor.BrC,
+  '14': LogColor.BrW,
   bold: LogColor.Bold,
   italic: LogColor.Italic,
   underline: LogColor.Underline,
   blink: LogColor.Blink,
   reverse: LogColor.Reverse,
   hidden: LogColor.Hidden,
+  sp: LogColor.SpB,
+  fr: LogColor.FrW,
+  mi: LogColor.MiP,
+  au: LogColor.AuG,
+  ic: LogColor.IcC,
+  tw: LogColor.TwM,
+  wi: LogColor.WiG,
+  ne: LogColor.NeP,
 };
-
-// const colorizeTag = (tag: string): string => {
-//   const normalizedTag = tag.replace(/[^a-zA-Z]/g, '').toLowerCase();
-//   const color = colorMapping[normalizedTag];
-//   return color ? `${color}[${tag}]${LogColor.Default}` : `[${tag}]`;
-// };
 
 const colorizeWord = (word: string): string => {
   const lowerCaseWord = word.toLowerCase();
@@ -98,7 +106,7 @@ const colorizeMessage = (message: string): string => {
 
 // مثال استفاده
 const message =
-  'This is a ~{Italic}`Italic text`, and this is a ~{Green}`green text`, and this is a normal message. [info] __ ~{1}`Fucker`';
+  'This is a ~{Italic}`Italic text`, and this is a ~{Green}`green text`, and this is a normal message. [info] __ ~{sp}`Salam`';
 console.log(colorizeMessage(message));
 
 const originalConsoleLog = console.log;
