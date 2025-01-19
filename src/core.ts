@@ -43,43 +43,47 @@ new (class extends Core {
   public Main(): void {
     if (configs.Args.authorization) {
       console.log('[core] ~{19}`Application is starting`...');
-      console.log('[core warn] authorization');
-      console.log('[error] some err');
-      void (async (): Promise<void> => {
-        await this.dbManager.connect('t1_test');
+      console.log('[warn] authorization');
+      const init = async (): Promise<void> => {
+        try {
+          await this.dbManager.connect('gl_auth');
 
-        await this.expressManager.start();
+          await this.expressManager.start();
 
-        const router = Router();
+          const router = Router();
 
-        router.get('/test', (_req: Request, res: Response) => {
-          res.status(200).send('hi');
-        });
+          router.get('/test', (_req: Request, res: Response) => {
+            res.status(200).send('hi');
+          });
 
-        void this.expressManager.addRoute('/', router);
+          void this.expressManager.addRoute('/', router);
 
-        const sampleData = {
-          name: 'John',
-          age: 30,
-          address: {
-            city: 'NYC',
-            zip: '10001',
-          },
-        };
+          // const sampleData = {
+          //   name: 'John',
+          //   age: 30,
+          //   address: {
+          //     city: 'NYC',
+          //     zip: '10001',
+          //   },
+          // };
 
-        await this.dbManager.saveData(sampleData);
+          // await this.dbManager.saveData(sampleData);
 
-        await this.dbManager.fetchData({ age: { $gt: 20 } });
+          // await this.dbManager.fetchData({ age: { $gt: 20 } });
 
-        // unique
-        const id2 = await this.dbManager.saveData({ name: 'Bob', age: 25 });
-        await this.dbManager.fetchDataById(id2);
+          // // unique
+          // const id2 = await this.dbManager.saveData({ name: 'Bob', age: 25 });
+          // await this.dbManager.fetchDataById(id2);
 
-        await this.dbManager.updateDataById(id2, {
-          age: 31,
-          newLine: 'test',
-        });
-      });
+          // await this.dbManager.updateDataById(id2, {
+          //   age: 31,
+          //   newLine: 'test',
+          // });
+        } catch (err) {
+          console.log('[error] ' + err);
+        }
+      };
+      void init();
     }
   }
 })();
