@@ -73,8 +73,13 @@ new (class extends Core {
             const { user, password }: { user: string; password: string } =
               value;
 
-            await this.dbManager.saveData({ user, password });
-            res.status(200).send('signed');
+            const exists = await this.dbManager.isUniqueFieldExists(user, user);
+            if (exists) {
+              res.status(500).send('user already exists');
+            } else {
+              await this.dbManager.saveData({ user, password });
+              res.status(200).send('signed');
+            }
 
             return res;
           });
