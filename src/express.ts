@@ -64,8 +64,12 @@ export class ExpressManager {
     return Router();
   }
 
-  public addRoute(path: string, router: Router): void {
-    this.app.use(path, router);
+  public addRoute(path: any, router?: Router): void {
+    if (router) {
+      this.app.use(path, router);
+    } else {
+      this.app.use(path);
+    }
   }
 
   public async start(): Promise<void> {
