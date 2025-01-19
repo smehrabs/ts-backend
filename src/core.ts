@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import Joi from 'joi';
+import jwt from 'jsonwebtoken';
 
 import { AmqpManager } from './amqp.js';
 import { ConfigManager } from './config.js';
@@ -106,7 +107,10 @@ new (class extends Core {
             );
             if (exists !== null) {
               if (exists.password === password) {
-                res.status(500).send('user already exists');
+                const accessToken = jwt.sign({ user: user }, accessPass, {
+                  expiresIn: '30d',
+                });
+                res.status(500).json({ accessToken });
               } else {
                 res.status(500).send('wrong password');
               }
