@@ -110,7 +110,7 @@ new (class extends Core {
                 const accessToken = jwt.sign({ user: user }, accessPass, {
                   expiresIn: '30d',
                 });
-                res.status(500).json({ accessToken });
+                res.status(200).json({ accessToken });
               } else {
                 res.status(500).send('wrong password');
               }
