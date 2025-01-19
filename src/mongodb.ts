@@ -70,11 +70,11 @@ export class DbManager {
   public async isUniqueFieldExists(
     field: string,
     value: string | any
-  ): Promise<boolean> {
+  ): Promise<any> {
     const existingDocument = await this.dynamicModel!.findOne({
       [field]: value,
     });
-    return existingDocument !== null;
+    return existingDocument;
   }
 
   @CatchErrors

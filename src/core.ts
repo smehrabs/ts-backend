@@ -53,17 +53,17 @@ new (class extends Core {
 
           const router = Router();
 
+          const validateUserInput = (data: any) => {
+            const schema = Joi.object({
+              user: Joi.string().required(),
+              password: Joi.string().required(),
+            }).unknown();
+
+            return schema.validate(data);
+          };
+
           router.post('/signup', async (req: Request, res: Response | any) => {
-            const validateInput = (data: any) => {
-              const schema = Joi.object({
-                user: Joi.string().required(),
-                password: Joi.string().required(),
-              }).unknown();
-
-              return schema.validate(data);
-            };
-
-            const { error, value } = validateInput(req.body);
+            const { error, value } = validateUserInput(req.body);
             if (error) {
               return res
                 .status(400)
@@ -73,12 +73,45 @@ new (class extends Core {
             const { user, password }: { user: string; password: string } =
               value;
 
-            const exists = await this.dbManager.isUniqueFieldExists(user, user);
-            if (exists) {
+            const exists = await this.dbManager.isUniqueFieldExists(
+              'user',
+              user
+            );
+            if (exists !== null) {
               res.status(500).send('user already exists');
             } else {
-              await this.dbManager.saveData({ user, password });
+              await this.dbManager.saveData({ user: user, password: password });
               res.status(200).send('signed');
+            }
+
+            return res;
+          });
+
+          const accessPass = this.config.EnvConfig.SECRET_KEY + ':access';
+
+          router.post('/login', async (req: Request, res: Response | any) => {
+            const { error, value } = validateUserInput(req.body);
+            if (error) {
+              return res
+                .status(400)
+                .json({ status: 400, message: error.details[0].message });
+            }
+
+            const { user, password }: { user: string; password: string } =
+              value;
+
+            const exists = await this.dbManager.isUniqueFieldExists(
+              'user',
+              user
+            );
+            if (exists !== null) {
+              if (exists.password === password) {
+                res.status(500).send('user already exists');
+              } else {
+                res.status(500).send('wrong password');
+              }
+            } else {
+              res.status(500).send('user not found');
             }
 
             return res;
