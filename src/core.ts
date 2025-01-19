@@ -41,9 +41,9 @@ export abstract class Core {
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 new (class extends Core {
   public Main(): void {
-    if (configs.Args.test) {
+    if (configs.Args.authorization) {
       console.log('[core] ~{19}`Application is starting`...');
-      console.log('[core warn] test');
+      console.log('[core warn] authorization');
       console.log('[error] some err');
       void (async (): Promise<void> => {
         await this.dbManager.connect('t1_test');
