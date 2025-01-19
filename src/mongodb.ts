@@ -67,6 +67,18 @@ export class DbManager {
 
   @CatchErrors
   @CheckDynamicModel
+  public async isUniqueFieldExists(
+    field: string,
+    value: string | any
+  ): Promise<boolean> {
+    const existingDocument = await this.dynamicModel!.findOne({
+      [field]: value,
+    });
+    return existingDocument !== null;
+  }
+
+  @CatchErrors
+  @CheckDynamicModel
   public async fetchData(
     query: Partial<DynamicData> = {}
   ): Promise<DynamicData[]> {

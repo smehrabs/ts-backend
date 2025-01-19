@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import Joi from 'joi';
 
 import { AmqpManager } from './amqp.js';
 import { ConfigManager } from './config.js';
@@ -52,7 +53,33 @@ new (class extends Core {
 
           const router = Router();
 
-          router.get('/test', (_req: Request, res: Response) => {
+          router.post('/signup', async (req: Request, res: Response | any) => {
+            const validateInput = (data: any) => {
+              const schema = Joi.object({
+                user: Joi.string().required(),
+                password: Joi.string().required(),
+              }).unknown();
+
+              return schema.validate(data);
+            };
+
+            const { error, value } = validateInput(req.body);
+            if (error) {
+              return res
+                .status(400)
+                .json({ status: 400, message: error.details[0].message });
+            }
+
+            const { user, password }: { user: string; password: string } =
+              value;
+
+            await this.dbManager.saveData({ user, password });
+            res.status(200).send('signed');
+
+            return res;
+          });
+
+          router.get('/', (_req: Request, res: Response) => {
             res.status(200).send('hi');
           });
 
