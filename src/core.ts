@@ -121,53 +121,53 @@ new (class extends Core {
             return res;
           });
 
-          const checkAdmin = (req: any, res: any, next: any) => {
-            const token = req.headers['authorization']?.split(' ')[1];
+          // const checkAdmin = (req: any, res: any, next: any) => {
+          //   const token = req.headers['authorization']?.split(' ')[1];
 
-            if (!token) {
-              return res.status(403).json({ message: 'Access denied' });
-            }
+          //   if (!token) {
+          //     return res.status(403).json({ message: 'Access denied' });
+          //   }
 
-            jwt.verify(token, accessPass, async (err: any, decoded: any) => {
-              if (err) {
-                return res.status(403).json({ message: 'Invalid token' });
-              }
+          //   jwt.verify(token, accessPass, async (err: any, decoded: any) => {
+          //     if (err) {
+          //       return res.status(403).json({ message: 'Invalid token' });
+          //     }
 
-              const exists = await this.dbManager.isUniqueFieldExists(
-                'user',
-                decoded.user
-              );
-              if (exists !== null) {
-                next();
-              } else {
-                res.status(403).json({ message: 'user not found' });
-              }
-            });
-          };
+          //     const exists = await this.dbManager.isUniqueFieldExists(
+          //       'user',
+          //       decoded.user
+          //     );
+          //     if (exists !== null) {
+          //       next();
+          //     } else {
+          //       res.status(403).json({ message: 'user not found' });
+          //     }
+          //   });
+          // };
 
-          const access = (token: string, access: string): boolean => {
-            let res: boolean = false;
-            jwt.verify(token, accessPass, async (err: any, decoded: any) => {
-              if (err) {
-                res = false;
-              }
+          // const access = (token: string, access: string): boolean => {
+          //   let res: boolean = false;
+          //   jwt.verify(token, accessPass, async (err: any, decoded: any) => {
+          //     if (err) {
+          //       res = false;
+          //     }
 
-              const exists = await this.dbManager.isUniqueFieldExists(
-                'user',
-                decoded.user
-              );
-              if (exists !== null) {
-                if (exists[access] === true) {
-                  res = true;
-                } else {
-                  res = false;
-                }
-              } else {
-                res = false;
-              }
-            });
-            return res;
-          };
+          //     const exists = await this.dbManager.isUniqueFieldExists(
+          //       'user',
+          //       decoded.user
+          //     );
+          //     if (exists !== null) {
+          //       if (exists[access] === true) {
+          //         res = true;
+          //       } else {
+          //         res = false;
+          //       }
+          //     } else {
+          //       res = false;
+          //     }
+          //   });
+          //   return res;
+          // };
 
           router.get('/', (_req: Request, res: Response) => {
             res.status(200).send('hi');
