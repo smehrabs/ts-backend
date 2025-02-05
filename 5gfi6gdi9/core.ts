@@ -10,7 +10,6 @@ import { ExpressManager } from './express.js';
 import { CustomLogger, LoggerManager } from './logger.js';
 import { DbManager } from './mongodb.js';
 
-// Core Application
 export abstract class Core {
   protected config: ConfigManager;
   protected logger: CustomLogger;
@@ -39,7 +38,6 @@ export abstract class Core {
   protected abstract Main(): void;
 }
 
-// Test
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 new (class extends Core {
   public Main(): void {
