@@ -2,11 +2,11 @@
   "compilerOptions": {
     "incremental": false,
     "target": "es2022",
-    "rootDir": "src",
+    "rootDir": "5gfi6gdi9",
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      // "#*": ["src/*"]
+      // "#*": ["5gfi6gdi9/*"]
     },
 
     "allowJs": true,
@@ -61,7 +61,7 @@
     "typeRoots": ["node_modules/@types"],
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["5gfi6gdi9/**/*.ts"],
   "exclude": ["node_modules/**", "dist/**"],
   "compileOnSave": false
 }
