@@ -177,7 +177,7 @@ export class ExpressManager {
           contact: {
             name: 'MRB',
             email: 'mehrabshafae@gmail.com',
-            url: 'https://github.com/MarborisOrg',
+            url: 'https://github.com/S-MRB-S',
           },
           version: '0.0.0', // app version (can change this)
         },
