@@ -3,6 +3,31 @@ import { Request, Response, Router } from 'express';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
 
+
+/*
+const dbManager = new DbManager();
+await dbManager.connect();
+
+// ایجاد نقش
+const adminRole = await dbManager.createRole('Admin');
+
+// ایجاد دسترسی
+const readPermission = await dbManager.createPermission('Read', adminRole._id);
+const writePermission = await dbManager.createPermission('Write', adminRole._id);
+
+// ایجاد کاربر
+const user = await dbManager.createUser('john_doe', [readPermission._id, writePermission._id]);
+
+await dbManager.close();
+
+//
+
+const userWithPermissions = await UserModel.findById(user._id).populate('permissions');
+console.log(userWithPermissions);
+
+
+*/
+
 export default async function (core: Core) {
   try {
     await core.dbManager.connect('gl_auth');

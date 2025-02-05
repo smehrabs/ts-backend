@@ -26,6 +26,46 @@ const CheckDynamicModel = (
   return descriptor;
 };
 
+// database models
+
+interface IRole extends Document {
+  name: string;
+}
+
+const RoleSchema = new mongoose.Schema<IRole>({
+  name: { type: String, required: true, unique: true },
+});
+
+const RoleModel: Model<IRole> = mongoose.model<IRole>('Role', RoleSchema);
+
+interface IPermission extends Document {
+  name: string;
+  roleId: mongoose.Types.ObjectId;
+}
+
+const PermissionSchema = new mongoose.Schema<IPermission>({
+  name: { type: String, required: true, unique: true },
+  roleId: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
+});
+
+const PermissionModel: Model<IPermission> = mongoose.model<IPermission>('Permission', PermissionSchema);
+
+// مدل کاربر
+interface IUser extends Document {
+  username: string;
+  permissions: mongoose.Types.ObjectId[]; // اشاره به دسترسی‌ها
+}
+
+const UserSchema = new mongoose.Schema<IUser>({
+  username: { type: String, required: true, unique: true },
+  permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permission' }],
+});
+
+const UserModel: Model<IUser> = mongoose.model<IUser>('User', UserSchema);
+
+//
+
+
 export class DbManager {
   private connection: mongoose.Mongoose | null = null;
   private dynamicSchema: mongoose.Schema | null = null;
@@ -141,4 +181,29 @@ export class DbManager {
     console.log('[core] mongodb: Updated data:', updatedDocument);
     return updatedDocument;
   }
+
+  @CatchErrors
+  public async createRole(name: string): Promise<IRole> {
+    const role = new RoleModel({ name });
+    await role.save();
+    console.log('[core] mongodb: Role created:', role);
+    return role;
+  }
+
+  @CatchErrors
+  public async createPermission(name: string, roleId: mongoose.Types.ObjectId): Promise<IPermission> {
+    const permission = new PermissionModel({ name, roleId });
+    await permission.save();
+    console.log('[core] mongodb: Permission created:', permission);
+    return permission;
+  }
+
+  @CatchErrors
+  public async createUser(username: string, permissions: mongoose.Types.ObjectId[]): Promise<IUser> {
+    const user = new UserModel({ username, permissions });
+    await user.save();
+    console.log('[core] mongodb: User created:', user);
+    return user;
+  }
+
 }
