@@ -1,6 +1,6 @@
 {
   "name": "@marboris/core",
-  "version": "2.11.1",
+  "version": "2.12.1",
   "description": "The core.",
   "private": false,
   "type": "module",
