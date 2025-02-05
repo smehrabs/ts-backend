@@ -9,7 +9,6 @@ import swaggerUi from 'swagger-ui-express';
 
 import { CatchErrors, Singleton } from './decorators.js';
 
-// Express Manager
 @Singleton
 export class ExpressManager {
   private app: Application;
@@ -37,7 +36,6 @@ export class ExpressManager {
       }
     });
 
-    // Default middleware
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
 
@@ -189,9 +187,7 @@ export class ExpressManager {
     };
 
     const swaggerSpec = swaggerJsdoc(options);
-    // Swagger Page
     this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-    // Documentation in JSON format
     this.app.get('/docs.json', (_req, res) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(swaggerSpec);
@@ -267,7 +263,7 @@ export class ExpressManager {
     res: Response,
     next: NextFunction
   ): void => {
-    const timeout = 3000; // just 3s
+    const timeout = 3000;
 
     const timer = setTimeout(() => {
       res.status(503).send('Request timed out!');

@@ -13,18 +13,17 @@ const colorMapping: Record<string, (...args: any[]) => string> = {
   critical: chalk.bgRed.white,
   core: chalk.bgRed.white,
 
-  lava: chalk.hex('#c21e56'), // Custom color
-  sky: chalk.hex('#76aaff'), // Custom color
-  forest: chalk.hex('#228b22'), // Custom color
-  sunset: chalk.hex('#fd5e53'), // Custom color
-  ocean: chalk.hex('#4f83cc'), // Custom color
-  violet: chalk.hex('#9b59b6'), // Custom color
-  peach: chalk.hex('#ffb6b9'), // Custom color
-  mint: chalk.hex('#98ff98'), // Custom color
-  gold: chalk.hex('#ffd700'), // Custom color
-  silver: chalk.hex('#c0c0c0'), // Custom color
+  lava: chalk.hex('#c21e56'),
+  sky: chalk.hex('#76aaff'),
+  forest: chalk.hex('#228b22'),
+  sunset: chalk.hex('#fd5e53'),
+  ocean: chalk.hex('#4f83cc'),
+  violet: chalk.hex('#9b59b6'),
+  peach: chalk.hex('#ffb6b9'),
+  mint: chalk.hex('#98ff98'),
+  gold: chalk.hex('#ffd700'),
+  silver: chalk.hex('#c0c0c0'),
 
-  // Levels with number mapping
   '1': chalk.red,
   '2': chalk.green,
   '3': chalk.yellow,
@@ -41,14 +40,13 @@ const colorMapping: Record<string, (...args: any[]) => string> = {
   '14': chalk.bgWhite.black,
   '15': chalk.bgBlue.white,
   '16': chalk.bgWhite.black,
-  '17': chalk.hex('#93A8C6'), // Frost white
-  '18': chalk.hex('#B45F06'), // Autumn Green
-  '19': chalk.hex('#51B4D1'), // Ice Cyan
-  '20': chalk.hex('#745EB0'), // Twilight Magenta
-  '21': chalk.hex('#4B4E53'), // Winter Gray
-  '22': chalk.hex('#FB59BB'), // Neon Pink
+  '17': chalk.hex('#93A8C6'),
+  '18': chalk.hex('#B45F06'),
+  '19': chalk.hex('#51B4D1'),
+  '20': chalk.hex('#745EB0'),
+  '21': chalk.hex('#4B4E53'),
+  '22': chalk.hex('#FB59BB'),
 
-  // Styles
   bold: chalk.bold,
   italic: chalk.italic,
   underline: chalk.underline,

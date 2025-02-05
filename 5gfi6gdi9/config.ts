@@ -8,7 +8,6 @@ import { Singleton } from './decorators.js';
 
 type Config = Record<string, any>;
 
-// Base Configuration Manager
 @Singleton
 export class ConfigManager {
   private args: Config;

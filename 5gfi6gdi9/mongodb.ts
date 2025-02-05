@@ -3,8 +3,8 @@ import mongoose, { Document, Model } from 'mongoose';
 import { CatchErrors } from './decorators.js';
 
 type DynamicData = {
-  readonly [x: string]: any; // Allow additional properties
-  _id: mongoose.Types.ObjectId; // Ensure _id is of the correct type
+  readonly [x: string]: any;
+  _id: mongoose.Types.ObjectId;
 } & Document;
 
 const CheckDynamicModel = (
@@ -98,16 +98,15 @@ export class DbManager {
     const query = this.dynamicModel!.find();
 
     if (limit > 0) {
-      query.limit(limit); // Limits the number of items if a valid limit is provided.
+      query.limit(limit);
     }
 
     if (page > 0) {
-      query.skip((page - 1) * (limit > 0 ? limit : 10)); // Skips items for pagination.
+      query.skip((page - 1) * (limit > 0 ? limit : 10));
     }
 
-    const items = await query.lean(); // Fetches items as plain JavaScript objects.
+    const items = await query.lean();
 
-    // Ensure that items are of type DynamicData[]
     const typedItems: DynamicData[] = items as DynamicData[];
 
     console.log('[core] mongodb: Fetched data:', typedItems);

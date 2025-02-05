@@ -1,4 +1,4 @@
-// Utility Decorators
+
 export const Singleton = <T extends { new (...args: any[]): any }>(
   constructor: T
 ): T => {

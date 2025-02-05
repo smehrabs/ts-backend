@@ -2,7 +2,6 @@ import { Channel, connect, Connection } from 'amqplib';
 
 import { CatchErrors } from './decorators.js';
 
-// AMQP Manager
 export class AmqpManager {
   private connection: Connection | null = null;
   private channel: Channel | null = null;

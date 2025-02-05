@@ -4,12 +4,10 @@ import winston from 'winston';
 
 import { Singleton } from './decorators.js';
 
-// Type Definitions
 export interface CustomLogger extends winston.Logger {
   core: (message: string | object) => void;
 }
 
-// Logger Manager
 @Singleton
 export class LoggerManager {
   private logger: CustomLogger;
